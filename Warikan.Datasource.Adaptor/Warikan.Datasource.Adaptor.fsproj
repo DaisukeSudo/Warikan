@@ -8,4 +8,10 @@
     <Compile Include="Library.fs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Warikan.Datasource\Warikan.Datasource.csproj" />
+    <ProjectReference Include="..\Warikan.Domain\Warikan.Domain.fsproj" />
+    <ProjectReference Include="..\Warikan.Service\Warikan.Service.fsproj" />
+  </ItemGroup>
+
 </Project>

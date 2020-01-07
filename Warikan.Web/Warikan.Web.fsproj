@@ -12,4 +12,10 @@
     <Compile Include="Program.fs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Warikan.Datasource.Adaptor\Warikan.Datasource.Adaptor.fsproj" />
+    <ProjectReference Include="..\Warikan.Domain\Warikan.Domain.fsproj" />
+    <ProjectReference Include="..\Warikan.Service\Warikan.Service.fsproj" />
+  </ItemGroup>
+
 </Project>
