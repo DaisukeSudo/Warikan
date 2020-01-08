@@ -7,7 +7,8 @@ package "Domain" as domain {
   class DrinkingParty {
     DrinkingPartyID
     TotalBilledAmount
-    OrganizerPaymentClass : PrescribedPaymentClass
+    Organizer
+    GuestGroups : GuestGroup list
     PaymentClasses : PrescribedPaymentClass list
   }
 
@@ -19,11 +20,23 @@ package "Domain" as domain {
     Value : Decimal
   }
 
+  class Organizer {
+    PrescribedPaymentClass
+  }
+
+  class GuestGroup {
+    PrescribedPaymentClass
+    GuestsNumber
+  }
+
+  class GuestsNumber {
+    Value : uint
+  }
+
   class PrescribedPaymentClass {
     PrescribedPaymentClassID
     PrescribedPaymentAmount
     PrescribedPaymentType
-    PaymentClassParticipantsNumber
   }
 
   class PrescribedPaymentClassID {
@@ -37,10 +50,6 @@ package "Domain" as domain {
   enum PrescribedPaymentType {
     JUST
     JUST_OR_MORE
-  }
-
-  class PaymentClassParticipantsNumber {
-    Value : uint
   }
 
 
@@ -60,7 +69,7 @@ package "Domain" as domain {
     PrescribedPaymentClassID
     PrescribedPaymentAmount
     IndividualPaymentAmount
-    PaymentClassParticipantsNumber
+    GuestsNumber
   }
 
   class IndividualPaymentAmount {
@@ -75,22 +84,26 @@ package "Domain" as domain {
 ' Domain
 DrinkingParty *-d-> DrinkingPartyID
 DrinkingParty *-d-> TotalBilledAmount
+DrinkingParty *-d-> Organizer
+DrinkingParty *-d-> GuestGroup
 DrinkingParty *-d-> PrescribedPaymentClass
 PrescribedPaymentClass *-d-> PrescribedPaymentClassID
 PrescribedPaymentClass *-d-> PrescribedPaymentAmount
 PrescribedPaymentClass *-d-> PrescribedPaymentType
-PrescribedPaymentClass *-d-> PaymentClassParticipantsNumber
+Organizer *-d-> PrescribedPaymentClass
+GuestGroup *-d-> PrescribedPaymentClass
+GuestGroup *-d-> GuestsNumber
 
 Accountant ..> DrinkingParty
 Accountant ..> SplitBillReport
 
-SplitBillReport *-d-> TotalBilledAmount
-SplitBillReport *-d-> IndividualPaymentAmount
-SplitBillReport *-d-> ReportedPaymentClass
-SplitBillReport *-d-> ExcessOrDeficiency
+SplitBillReport  *-d-> TotalBilledAmount
+SplitBillReport  *-d-> IndividualPaymentAmount
+SplitBillReport *--d-> ReportedPaymentClass
+SplitBillReport  *-d-> ExcessOrDeficiency
 ReportedPaymentClass *-d-> PrescribedPaymentClassID
 ReportedPaymentClass *-d-> PrescribedPaymentAmount
 ReportedPaymentClass *-d-> IndividualPaymentAmount
-ReportedPaymentClass *-d-> PaymentClassParticipantsNumber
+ReportedPaymentClass *-d-> GuestsNumber
 
 @enduml
