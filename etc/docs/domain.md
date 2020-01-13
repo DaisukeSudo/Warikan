@@ -4,103 +4,125 @@
 @startuml
 package "Domain" as domain {
 
-  class DrinkingParty {
-    DrinkingPartyID
-    TotalBilledAmount
-    Organizer
-    GuestGroups : GuestGroup list
-    PaymentClasses : PrescribedPaymentClass list
+  package DrinkingParty as pkg_drinking_party {
+
+    class DrinkingParty {
+      DrinkingPartyID
+      TotalBilledAmount
+      Organizer
+      GuestGroupList : GuestGroupList
+      PaymentClassList : PrescribedPaymentClassList
+    }
+
+    class DrinkingPartyID {
+      Value : UUID
+    }
+
+    class TotalBilledAmount {
+      Value : uint
+    }
+
+    class Organizer {
+      PrescribedPaymentClassID
+    }
+
+    class GuestGroupList {
+      Items : GuestGroup list
+    }
+
+    class GuestGroup {
+      PrescribedPaymentClassID
+      GuestsNumber
+    }
+
+    class GuestsNumber {
+      Value : uint
+    }
+
+    class PrescribedPaymentClassList {
+      Items : PrescribedPaymentClass list
+    }
+
+    class PrescribedPaymentClass {
+      PrescribedPaymentClassID
+      PrescribedPaymentAmount
+      PrescribedPaymentType
+    }
+
+    class PrescribedPaymentClassID {
+      Value : uint
+    }
+
+    class PrescribedPaymentAmount {
+      Value : uint
+    }
+
+    enum PrescribedPaymentType {
+      JUST
+      JUST_OR_MORE
+    }
   }
 
-  class DrinkingPartyID {
-    Value : UUID
+  package Accountant as pkg_accountant {
+
+    class "calculate" as Accountant_calculate << (F, #a8e3f1) >> {
+      DrinkingParty -> SplitBillReport
+    }
   }
 
-  class TotalBilledAmount {
-    Value : Decimal
-  }
+  package SplitBillReport as pkg_split_bill_report {
 
-  class Organizer {
-    PrescribedPaymentClass
-  }
+    class SplitBillReport {
+      TotalBilledAmount
+      OrganizerPaymentAmount : IndividualPaymentAmount
+      PaymentClassList : ReportedPaymentClassList
+      ExtraOrShortage
+    }
 
-  class GuestGroup {
-    PrescribedPaymentClass
-    GuestsNumber
-  }
+    class ReportedPaymentClassList {
+      Items : ReportedPaymentClass list
+    }
 
-  class GuestsNumber {
-    Value : uint
-  }
+    class ReportedPaymentClass {
+      PrescribedPaymentClassID
+      PrescribedPaymentAmount
+      IndividualPaymentAmount
+      GuestsNumber
+    }
 
-  class PrescribedPaymentClass {
-    PrescribedPaymentClassID
-    PrescribedPaymentAmount
-    PrescribedPaymentType
-  }
+    class IndividualPaymentAmount {
+      Value : uint
+    }
 
-  class PrescribedPaymentClassID {
-    Value : uint
-  }
-
-  class PrescribedPaymentAmount {
-    Value : Decimal
-  }
-
-  enum PrescribedPaymentType {
-    JUST
-    JUST_OR_MORE
-  }
-
-
-  class Accountant {
-    calculate(DrinkingParty drinkingParty) : SplitBillReport
-  }
-
-
-  class SplitBillReport {
-    TotalBilledAmount
-    OrganizerPaymentAmount : IndividualPaymentAmount
-    PaymentClasses : ReportedPaymentClass list
-    ExcessOrDeficiency
-  }
-
-  class ReportedPaymentClass {
-    PrescribedPaymentClassID
-    PrescribedPaymentAmount
-    IndividualPaymentAmount
-    GuestsNumber
-  }
-
-  class IndividualPaymentAmount {
-    Value : Decimal
-  }
-
-  class ExcessOrDeficiency {
-    Value : Decimal
+    class ExtraOrShortage {
+      Value : uint
+    }
   }
 }
 
-' Domain
+Accountant_calculate ..> DrinkingParty
+Accountant_calculate ..> SplitBillReport
+DrinkingParty --r[hidden]-- SplitBillReport
+
 DrinkingParty *-d-> DrinkingPartyID
 DrinkingParty *-d-> TotalBilledAmount
 DrinkingParty *-d-> Organizer
-DrinkingParty *-d-> GuestGroup
-DrinkingParty *-d-> PrescribedPaymentClass
+DrinkingParty *-d-> GuestGroupList
+DrinkingParty *-d-> PrescribedPaymentClassList
+GuestGroupList *-d-> GuestGroup
+PrescribedPaymentClassList *-d-> PrescribedPaymentClass
 PrescribedPaymentClass *-d-> PrescribedPaymentClassID
 PrescribedPaymentClass *-d-> PrescribedPaymentAmount
 PrescribedPaymentClass *-d-> PrescribedPaymentType
-Organizer *-d-> PrescribedPaymentClass
-GuestGroup *-d-> PrescribedPaymentClass
+Organizer *-d-> PrescribedPaymentClassID
+GuestGroup *-d-> PrescribedPaymentClassID
 GuestGroup *-d-> GuestsNumber
 
-Accountant ..> DrinkingParty
-Accountant ..> SplitBillReport
-
-SplitBillReport  *-d-> TotalBilledAmount
-SplitBillReport  *-d-> IndividualPaymentAmount
-SplitBillReport *--d-> ReportedPaymentClass
-SplitBillReport  *-d-> ExcessOrDeficiency
+SplitBillReport *-d-> TotalBilledAmount
+SplitBillReport *-d-> IndividualPaymentAmount
+SplitBillReport *-d-> ReportedPaymentClassList
+SplitBillReport *-d-> ExtraOrShortage
+ReportedPaymentClassList *-d-> ReportedPaymentClass
 ReportedPaymentClass *-d-> PrescribedPaymentClassID
 ReportedPaymentClass *-d-> PrescribedPaymentAmount
 ReportedPaymentClass *-d-> IndividualPaymentAmount
