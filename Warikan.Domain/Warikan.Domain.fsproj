@@ -5,7 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Library.fs" />
+    <Compile Include="DrinkingParty\PrescribedPaymentClass.fs" />
+    <Compile Include="DrinkingParty\GuestGroup.fs" />
+    <Compile Include="DrinkingParty\DrinkingParty.fs" />
+    <Compile Include="SplitBillReport\ReportedPaymentClass.fs" />
+    <Compile Include="SplitBillReport\SplitBillReport.fs" />
+    <Compile Include="Accountant\Accountant.fs" />
   </ItemGroup>
 
 </Project>

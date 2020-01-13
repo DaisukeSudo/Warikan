@@ -74,9 +74,13 @@ package "Domain" as domain {
 
     class SplitBillReport {
       TotalBilledAmount
-      OrganizerPaymentAmount : IndividualPaymentAmount
+      OrganizerPaymentAmount
       PaymentClassList : ReportedPaymentClassList
       ExtraOrShortage
+    }
+
+    class OrganizerPaymentAmount {
+      Value : uint
     }
 
     class ReportedPaymentClassList {
@@ -86,16 +90,16 @@ package "Domain" as domain {
     class ReportedPaymentClass {
       PrescribedPaymentClassID
       PrescribedPaymentAmount
-      IndividualPaymentAmount
+      GuestPaymentAmount
       GuestsNumber
     }
 
-    class IndividualPaymentAmount {
+    class GuestPaymentAmount {
       Value : uint
     }
 
     class ExtraOrShortage {
-      Value : uint
+      Value : int
     }
   }
 }
@@ -119,13 +123,13 @@ GuestGroup *-d-> PrescribedPaymentClassID
 GuestGroup *-d-> GuestsNumber
 
 SplitBillReport *-d-> TotalBilledAmount
-SplitBillReport *-d-> IndividualPaymentAmount
+SplitBillReport *-d-> OrganizerPaymentAmount
 SplitBillReport *-d-> ReportedPaymentClassList
 SplitBillReport *-d-> ExtraOrShortage
 ReportedPaymentClassList *-d-> ReportedPaymentClass
 ReportedPaymentClass *-d-> PrescribedPaymentClassID
 ReportedPaymentClass *-d-> PrescribedPaymentAmount
-ReportedPaymentClass *-d-> IndividualPaymentAmount
+ReportedPaymentClass *-d-> GuestPaymentAmount
 ReportedPaymentClass *-d-> GuestsNumber
 
 @enduml

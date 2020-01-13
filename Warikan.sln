@@ -11,9 +11,11 @@ Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Warikan.Service", "Warikan.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Warikan.Datasource", "Warikan.Datasource\Warikan.Datasource.csproj", "{7708A097-D5FE-4ACE-92EA-D40708F13647}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Warikan.Datasource.Adaptor", "Warikan.Datasource.Adaptor\Warikan.Datasource.Adaptor.fsproj", "{33629643-5730-4DBF-B2A4-21E84F3633FC}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Warikan.Datasource.Adaptor", "Warikan.Datasource.Adaptor\Warikan.Datasource.Adaptor.fsproj", "{33629643-5730-4DBF-B2A4-21E84F3633FC}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Warikan.Console", "Warikan.Console\Warikan.Console.fsproj", "{5F26E30D-E8D7-49E2-872B-0FC90C7197D0}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Warikan.Console", "Warikan.Console\Warikan.Console.fsproj", "{5F26E30D-E8D7-49E2-872B-0FC90C7197D0}"
+EndProject
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Warikan.Domain.Test", "Warikan.Domain.Test\Warikan.Domain.Test.fsproj", "{1CF87945-F509-44E7-9EF4-F82AA14BC878}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{5F26E30D-E8D7-49E2-872B-0FC90C7197D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F26E30D-E8D7-49E2-872B-0FC90C7197D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F26E30D-E8D7-49E2-872B-0FC90C7197D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CF87945-F509-44E7-9EF4-F82AA14BC878}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CF87945-F509-44E7-9EF4-F82AA14BC878}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CF87945-F509-44E7-9EF4-F82AA14BC878}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CF87945-F509-44E7-9EF4-F82AA14BC878}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
