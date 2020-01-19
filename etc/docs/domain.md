@@ -10,7 +10,7 @@ package "Domain" as domain {
       DrinkingPartyID
       TotalBilledAmount
       Organizer
-      GuestGroupList : GuestGroupList
+      GuestGroupList
       PaymentClassList : PrescribedPaymentClassList
     }
 
@@ -65,31 +65,41 @@ package "Domain" as domain {
 
   package Accountant as pkg_accountant {
 
-    class "calculate" as Accountant_calculate << (F, #a8e3f1) >> {
-      DrinkingParty -> SplitBillReport
+    class Accountant << (F, #a8e3f1) >> {
+      Calculate : DrinkingParty -> SplitBillReport
     }
   }
 
   package SplitBillReport as pkg_split_bill_report {
 
     class SplitBillReport {
+      DrinkingPartyID
       TotalBilledAmount
-      OrganizerPaymentAmount
-      PaymentClassList : ReportedPaymentClassList
+      OrganizerPaymentClass
+      GuestPaymentClassList
+      TotalPaymentAmount
       ExtraOrShortage
+    }
+
+    class OrganizerPaymentClass {
+      PrescribedPaymentClassID
+      PrescribedPaymentAmount
+      PrescribedPaymentType
+      OrganizerPaymentAmount
     }
 
     class OrganizerPaymentAmount {
       Value : uint
     }
 
-    class ReportedPaymentClassList {
-      Items : ReportedPaymentClass list
+    class GuestPaymentClassList {
+      Items : GuestPaymentClass list
     }
 
-    class ReportedPaymentClass {
+    class GuestPaymentClass {
       PrescribedPaymentClassID
       PrescribedPaymentAmount
+      PrescribedPaymentType
       GuestPaymentAmount
       GuestsNumber
     }
@@ -98,18 +108,31 @@ package "Domain" as domain {
       Value : uint
     }
 
-    class ExtraOrShortage {
+    class TotalPaymentAmount {
+      Value : uint
+    }
+
+    class ExtraOrShortage << (U, #d9c383) >> {
+      Extra of Extra
+      Shortage of Shortage
+    }
+
+    class Extra {
+      Value : uint
+    }
+
+    class Shortage {
       Value : int
     }
   }
 }
 
-Accountant_calculate ..> DrinkingParty
-Accountant_calculate ..> SplitBillReport
+Accountant ..> DrinkingParty
+Accountant ..> SplitBillReport
 DrinkingParty --r[hidden]-- SplitBillReport
 
 DrinkingParty *-d-> DrinkingPartyID
-DrinkingParty *-d-> TotalBilledAmount
+DrinkingParty *--d-> TotalBilledAmount
 DrinkingParty *-d-> Organizer
 DrinkingParty *-d-> GuestGroupList
 DrinkingParty *-d-> PrescribedPaymentClassList
@@ -119,17 +142,27 @@ PrescribedPaymentClass *-d-> PrescribedPaymentClassID
 PrescribedPaymentClass *-d-> PrescribedPaymentAmount
 PrescribedPaymentClass *-d-> PrescribedPaymentType
 Organizer *-d-> PrescribedPaymentClassID
+Organizer -r[hidden]- GuestGroup
 GuestGroup *-d-> PrescribedPaymentClassID
 GuestGroup *-d-> GuestsNumber
 
-SplitBillReport *-d-> TotalBilledAmount
-SplitBillReport *-d-> OrganizerPaymentAmount
-SplitBillReport *-d-> ReportedPaymentClassList
-SplitBillReport *-d-> ExtraOrShortage
-ReportedPaymentClassList *-d-> ReportedPaymentClass
-ReportedPaymentClass *-d-> PrescribedPaymentClassID
-ReportedPaymentClass *-d-> PrescribedPaymentAmount
-ReportedPaymentClass *-d-> GuestPaymentAmount
-ReportedPaymentClass *-d-> GuestsNumber
+SplitBillReport *-d-> DrinkingPartyID
+SplitBillReport *--d-> TotalBilledAmount
+SplitBillReport *--d-> OrganizerPaymentClass
+SplitBillReport *-d-> GuestPaymentClassList
+SplitBillReport *--d-> TotalPaymentAmount
+SplitBillReport *--d-> ExtraOrShortage
+' OrganizerPaymentClass *-d-> PrescribedPaymentClassID
+' OrganizerPaymentClass *-d-> PrescribedPaymentAmount
+' OrganizerPaymentClass *-d-> PrescribedPaymentType
+OrganizerPaymentClass *-d-> OrganizerPaymentAmount
+GuestPaymentClassList *-d-> GuestPaymentClass
+' GuestPaymentClass *-d-> PrescribedPaymentClassID
+' GuestPaymentClass *-d-> PrescribedPaymentAmount
+' GuestPaymentClass *-d-> PrescribedPaymentType
+GuestPaymentClass *-d-> GuestsNumber
+GuestPaymentClass *-d-> GuestPaymentAmount
+ExtraOrShortage *-d-> Extra
+ExtraOrShortage *-d-> Shortage
 
 @enduml
