@@ -1,5 +1,7 @@
 ﻿namespace Warikan.Domain.DrinkingParty
 
+open Warikan.Domain.Common
+
 type PrescribedPaymentClassId =
     private PrescribedPaymentClassId of uint32
 
@@ -14,7 +16,7 @@ type PrescribedPaymentType =
 
 
 type PrescribedPaymentAmount =
-    private PrescribedPaymentAmount of uint32
+    private PrescribedPaymentAmount of PositiveAmount
 
 module PrescribedPaymentAmount =
     let create v = PrescribedPaymentAmount v
@@ -29,9 +31,9 @@ type PrescribedPaymentClass = {
 
 module PrescribedPaymentClass =
     let create
-        (paymentType    : PrescribedPaymentType)
-        (paymentAmount  : PrescribedPaymentAmount)
-        (paymentClassId : PrescribedPaymentClassId)
+        (paymentType    : PrescribedPaymentType     )
+        (paymentAmount  : PrescribedPaymentAmount   )
+        (paymentClassId : PrescribedPaymentClassId  )
         : PrescribedPaymentClass
         =
         {
@@ -40,19 +42,13 @@ module PrescribedPaymentClass =
             PaymentAmount   = paymentAmount
         }
 
-    let isIdentical
-        (paymentClassId : PrescribedPaymentClassId)
-        (paymentClass   : PrescribedPaymentClass)
-        =
-        paymentClass.PaymentClassId = paymentClassId
-
 
 type PrescribedPaymentClassList = {
     Items : PrescribedPaymentClass list
 }
 
 module PrescribedPaymentClassList =
-    let getMaxPaymentClassId
+    let private getMaxPaymentClassId
         (list : PrescribedPaymentClassList)
         : PrescribedPaymentClassId
         =
@@ -60,7 +56,7 @@ module PrescribedPaymentClassList =
         |> Seq.map (fun x -> x.PaymentClassId)
         |> Seq.max
 
-    let newMaxPaymentClassId
+    let private newMaxPaymentClassId
         (list : PrescribedPaymentClassList)
         : PrescribedPaymentClassId
         =
@@ -68,21 +64,25 @@ module PrescribedPaymentClassList =
         |> PrescribedPaymentClassId.value
         |> (+) 1u
         |> PrescribedPaymentClassId.create
-        
-    let add
-        (paymentType    : PrescribedPaymentType)
-        (paymentAmount  : PrescribedPaymentAmount)
-        (list           : PrescribedPaymentClassList)
-        : PrescribedPaymentClassList
-        =
-        newMaxPaymentClassId list
-        |> PrescribedPaymentClass.create paymentType paymentAmount
-        |> fun newItem -> list.Items @ [newItem]
-        |> fun newItems -> { Items = newItems }
 
-    let findOneById
-        (id     : PrescribedPaymentClassId)
-        (list   : PrescribedPaymentClassList)
-        =
-        list.Items
-        |> Seq.find (fun x -> x.PaymentClassId = id)
+    type Add =
+        PrescribedPaymentType
+            -> PrescribedPaymentAmount
+            -> PrescribedPaymentClassList
+            -> PrescribedPaymentClassList
+        
+    let add : Add =
+        fun paymentType paymentAmount list ->
+            newMaxPaymentClassId list
+            |> PrescribedPaymentClass.create paymentType paymentAmount
+            |> fun newItem -> { Items = list.Items @ [newItem] }
+
+    type FindOneById =
+        PrescribedPaymentClassId
+            -> PrescribedPaymentClassList
+            -> PrescribedPaymentClass
+
+    let findOneById : FindOneById =
+        fun id list ->
+            list.Items
+            |> Seq.find (fun x -> x.PaymentClassId = id)

@@ -4,7 +4,7 @@ open Warikan.Domain.DrinkingParty
 open Warikan.Domain.SplitBillReport
 
 module Accountant =
-    type CreateUnadjustedSplitBillReport = UnadjustedSplitBillReportFactory.CreateUnadjustedSplitBillReport
+    type CreateUnadjustedSplitBillReport = UnadjustedSplitBillReport.CreateBy
     type AdjustSplitBillReport = SplitBillReportAdjustor.AdjustSplitBillReport
 
     type Calculate =

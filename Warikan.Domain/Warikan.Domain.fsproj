@@ -9,13 +9,16 @@
     <Compile Include="DrinkingParty\PrescribedPaymentClass.fs" />
     <Compile Include="DrinkingParty\GuestGroup.fs" />
     <Compile Include="DrinkingParty\Organizer.fs" />
+    <Compile Include="DrinkingParty\TotalBilledAmount.fs" />
     <Compile Include="DrinkingParty\DrinkingParty.fs" />
     <Compile Include="SplitBillReport\OrganizerPaymentClass.fs" />
     <Compile Include="SplitBillReport\GuestPaymentClass.fs" />
     <Compile Include="SplitBillReport\ReportedPaymentClass.fs" />
+    <Compile Include="SplitBillReport\TotalPaymentAmount.fs" />
+    <Compile Include="SplitBillReport\ExtraOrShortage.fs" />
+    <Compile Include="SplitBillReport\UnadjustedSplitBillReport.fs" />
     <Compile Include="SplitBillReport\AdditionalPayer.fs" />
     <Compile Include="SplitBillReport\SplitBillReport.fs" />
-    <Compile Include="Accountant\UnadjustedSplitBillReportFactory.fs" />
     <Compile Include="Accountant\SplitBillReportAdjustor.fs" />
     <Compile Include="Accountant\Accountant.fs" />
   </ItemGroup>

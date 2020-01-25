@@ -1,41 +1,62 @@
 ﻿namespace Warikan.Domain.SplitBillReport
 
+open Warikan.Domain.Common
 open Warikan.Domain.DrinkingParty
 
 type GuestPaymentAmount =
-    private GuestPaymentAmount of uint32
+    private GuestPaymentAmount of PositiveAmount
 
 module GuestPaymentAmount =
     let create v = GuestPaymentAmount v
     let value (GuestPaymentAmount v) = v
 
     let createBy (prescribedPaymentAmount : PrescribedPaymentAmount) =
-        create (PrescribedPaymentAmount.value prescribedPaymentAmount)
+        prescribedPaymentAmount
+        |> PrescribedPaymentAmount.value
+        |> create
 
 
 type GuestPaymentClass = {
-    PaymentClassId      : PrescribedPaymentClassId
-    PaymentType         : PrescribedPaymentType
-    PaymentAmount       : PrescribedPaymentAmount
-    GuestPaymentAmount  : GuestPaymentAmount
-    GuestsCount         : GuestsCount
+    PrescribedPaymentClassId    : PrescribedPaymentClassId
+    PrescribedPaymentType       : PrescribedPaymentType
+    PrescribedPaymentAmount     : PrescribedPaymentAmount
+    GuestPaymentAmount          : GuestPaymentAmount
+    GuestsCount                 : GuestsCount
 }
 
 module GuestPaymentClass =
-    type CreateGuestPaymentClass =
-        PrescribedPaymentClassList -> GuestGroup -> GuestPaymentClass
+    type CreateBy =
+        PrescribedPaymentClassList
+            -> GuestGroup
+            -> GuestPaymentClass
 
-    let createBy : CreateGuestPaymentClass =
+    let createBy : CreateBy =
         fun paymentClassList guestGroup ->
             paymentClassList
             |> PrescribedPaymentClassList.findOneById guestGroup.PaymentClassId 
             |> fun paymentClass -> {
-                PaymentClassId          = paymentClass.PaymentClassId
-                PaymentType             = paymentClass.PaymentType
-                PaymentAmount           = paymentClass.PaymentAmount
-                GuestPaymentAmount      = GuestPaymentAmount.createBy paymentClass.PaymentAmount
-                GuestsCount             = guestGroup.GuestsCount
+                PrescribedPaymentClassId    = paymentClass.PaymentClassId
+                PrescribedPaymentType       = paymentClass.PaymentType
+                PrescribedPaymentAmount     = paymentClass.PaymentAmount
+                GuestPaymentAmount          = paymentClass.PaymentAmount |> GuestPaymentAmount.createBy
+                GuestsCount                 = guestGroup.GuestsCount
             }
+
+    let guestPaymentAmountValue (c: GuestPaymentClass) =
+        c.GuestPaymentAmount
+            |> GuestPaymentAmount.value
+
+    let guestsCountValue (c: GuestPaymentClass) =
+        c.GuestsCount
+            |> GuestsCount.value
+
+    let classPaymentAmountValue (c: GuestPaymentClass) =
+            [
+                c |> guestPaymentAmountValue |> PositiveAmount.value
+                c |> guestsCountValue |> decimal
+            ]
+            |> Seq.reduce (*)
+            |> PositiveAmount.create
 
 
 type GuestPaymentClassList = {
@@ -43,13 +64,13 @@ type GuestPaymentClassList = {
 }
 
 module GuestPaymentClassList =
-    type CreateGuestPaymentClassList =
-        PrescribedPaymentClassList -> GuestGroupList -> GuestPaymentClassList
+    type CreateBy =
+        PrescribedPaymentClassList
+            -> GuestGroupList
+            -> GuestPaymentClassList
 
-    let createBy : CreateGuestPaymentClassList =
+    let createBy : CreateBy =
         fun paymentClassList guestGroupList ->
             guestGroupList.Items
-            |> List.map (fun item -> GuestPaymentClass.createBy paymentClassList item)
-            |> fun items -> {
-                Items = items
-            }
+            |> List.map (GuestPaymentClass.createBy paymentClassList)
+            |> fun items -> { Items = items }

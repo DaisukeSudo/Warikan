@@ -2,6 +2,9 @@
 
 type PositiveAmount =
     private PositiveAmount of decimal
+    with
+    static member Zero = PositiveAmount 0M
+    static member (+) (PositiveAmount a, PositiveAmount b) = PositiveAmount (a + b)
 
 module PositiveAmount =
     let create v =

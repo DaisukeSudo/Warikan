@@ -1,6 +1,7 @@
 ﻿namespace Warikan.Domain.DrinkingParty
 
 open System
+open Warikan.Domain.Common
 
 type DrinkingPartyId =
     private DrinkingPartyId of Guid
@@ -10,14 +11,6 @@ module DrinkingPartyId =
     let value (DrinkingPartyId v) = v
 
 
-type TotalBilledAmount =
-    private TotalBilledAmount of uint32
-
-module TotalBilledAmount =
-    let create v = TotalBilledAmount v
-    let value (TotalBilledAmount v) = v
-
-
 type DrinkingParty = {
     DrinkingPartyId     : DrinkingPartyId
     TotalBilledAmount   : TotalBilledAmount
@@ -25,3 +18,20 @@ type DrinkingParty = {
     GuestGroupList      : GuestGroupList
     PaymentClassList    : PrescribedPaymentClassList
 }
+
+module DrinkingParty =
+    let create
+        (totalBilledAmount   : TotalBilledAmount            )
+        (organizer           : Organizer                    )
+        (guestGroupList      : GuestGroupList               )
+        (paymentClassList    : PrescribedPaymentClassList   )
+        (drinkingPartyId     : DrinkingPartyId              )
+        : DrinkingParty
+        =
+        {
+            DrinkingPartyId     = drinkingPartyId
+            TotalBilledAmount   = totalBilledAmount
+            Organizer           = organizer
+            GuestGroupList      = guestGroupList
+            PaymentClassList    = paymentClassList
+        }

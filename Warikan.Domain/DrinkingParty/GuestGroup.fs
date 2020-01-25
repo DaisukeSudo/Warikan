@@ -15,8 +15,8 @@ type GuestGroup = {
 
 module GuestGroup =
     let create
-        (guestsCount    : GuestsCount)
-        (paymentClassId : PrescribedPaymentClassId)
+        (guestsCount    : GuestsCount               )
+        (paymentClassId : PrescribedPaymentClassId  )
         : GuestGroup
         =
         {
