@@ -2,23 +2,37 @@
 
 open Warikan.Domain.DrinkingParty
 
-// SplitBillReport
+type TotalPaymentAmount =
+    private TotalPaymentAmount of uint32
 
-type OrganizerPaymentAmount = private OrganizerPaymentAmount of uint32
+module TotalPaymentAmount =
+    let create v = TotalPaymentAmount v
+    let value (TotalPaymentAmount v) = v
 
-module OrganizerPaymentAmount =
-    let create value =
-        OrganizerPaymentAmount value
-            
-type ExtraOrShortage = private ExtraOrShortage of uint32
+
+type ExtraOrShortage =
+    private ExtraOrShortage of int
 
 module ExtraOrShortage =
-    let create value =
-        ExtraOrShortage value
+    let create v = ExtraOrShortage v
+    let value (ExtraOrShortage v) = v
+
+
+type UnadjustedSplitBillReport = {
+   DrinkingPartyId         : DrinkingPartyId
+   TotalBilledAmount       : TotalBilledAmount
+   OrganizerPaymentClass   : OrganizerPaymentClass
+   GuestPaymentClassList   : GuestPaymentClassList
+   TotalPaymentAmount      : TotalPaymentAmount
+   ExtraOrShortage         : ExtraOrShortage
+}
+
 
 type SplitBillReport = {
-    TotalBilledAmount : TotalBilledAmount
-    OrganizerPaymentAmount : OrganizerPaymentAmount
-    PaymentClassList : ReportedPaymentClassList
-    ExtraOrShortage : ExtraOrShortage
+    DrinkingPartyId         : DrinkingPartyId
+    TotalBilledAmount       : TotalBilledAmount
+    OrganizerPaymentClass   : OrganizerPaymentClass
+    GuestPaymentClassList   : GuestPaymentClassList
+    TotalPaymentAmount      : TotalPaymentAmount
+    ExtraOrShortage         : ExtraOrShortage
 }

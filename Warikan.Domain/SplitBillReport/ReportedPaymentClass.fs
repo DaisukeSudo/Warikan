@@ -1,22 +1,21 @@
 ﻿namespace Warikan.Domain.SplitBillReport
 
-open Warikan.Domain.DrinkingParty
+type ReportedPaymentClass =
+    | ReportedOrganizerPaymentClass of OrganizerPaymentClass
+    | ReportedGuestPaymentClass of GuestPaymentClass
 
-// ReportedPaymentClass
 
-type GuestPaymentAmount = private GuestPaymentAmount of uint32
-
-module GuestPaymentAmount =
-    let create value =
-        GuestPaymentAmount value
-
-type ReportedPaymentClass = {
-    PaymentClassId : PrescribedPaymentClassId
-    PaymentAmount : PrescribedPaymentAmount
-    GuestPaymentAmount : GuestPaymentAmount
-    GuestsNumber : GuestsNumber
-}
-    
 type ReportedPaymentClassList = {
     Items : ReportedPaymentClass list
 }
+
+module ReportedPaymentClassList =
+    type CreateReportedPaymentClassList =
+        OrganizerPaymentClass -> GuestPaymentClassList -> ReportedPaymentClassList
+
+    let createBy : CreateReportedPaymentClassList =
+        fun organizerPaymentClass guestPaymentClassList ->
+            guestPaymentClassList.Items
+            |> List.map (fun x -> ReportedGuestPaymentClass(x))
+            |> List.append [ReportedOrganizerPaymentClass(organizerPaymentClass)]
+            |> fun items -> { Items = items }

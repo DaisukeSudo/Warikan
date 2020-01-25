@@ -1,24 +1,30 @@
 ﻿namespace Warikan.Domain.DrinkingParty
 
-// GuestGroup
+type GuestsCount =
+    private GuestsCount of uint32
 
-type GuestsNumber = private GuestsNumber of uint32
+module GuestsCount =
+    let create v = GuestsCount v
+    let value (GuestsCount v) = v
 
-module GuestsNumber =
-    let create value =
-        GuestsNumber value
 
 type GuestGroup = {
-    PaymentClassId : PrescribedPaymentClassId
-    GuestsNumber : GuestsNumber
+    PaymentClassId  : PrescribedPaymentClassId
+    GuestsCount     : GuestsCount
 }
+
+module GuestGroup =
+    let create
+        (guestsCount    : GuestsCount)
+        (paymentClassId : PrescribedPaymentClassId)
+        : GuestGroup
+        =
+        {
+            PaymentClassId  = paymentClassId
+            GuestsCount     = guestsCount
+        }
+
 
 type GuestGroupList = {
     Items : GuestGroup list
-}
-
-// Organizer
-
-type Organizer = {
-    PaymentClassId : PrescribedPaymentClassId
 }

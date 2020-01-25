@@ -2,24 +2,26 @@
 
 open System
 
-// DrinkingParty
-
-type DrinkingPartyId = private DrinkingPartyId of Guid
+type DrinkingPartyId =
+    private DrinkingPartyId of Guid
 
 module DrinkingPartyId =
-    let create value =
-        DrinkingPartyId value
+    let create v = DrinkingPartyId v
+    let value (DrinkingPartyId v) = v
 
-type TotalBilledAmount = private TotalBilledAmount of uint32
+
+type TotalBilledAmount =
+    private TotalBilledAmount of uint32
 
 module TotalBilledAmount =
-    let create value =
-        TotalBilledAmount value
+    let create v = TotalBilledAmount v
+    let value (TotalBilledAmount v) = v
+
 
 type DrinkingParty = {
-    DrinkingPartyId : DrinkingPartyId
-    TotalBilledAmount : TotalBilledAmount
-    Organizer : Organizer
-    GuestGroupList : GuestGroupList
-    PaymentClassList : PrescribedPaymentClassList
+    DrinkingPartyId     : DrinkingPartyId
+    TotalBilledAmount   : TotalBilledAmount
+    Organizer           : Organizer
+    GuestGroupList      : GuestGroupList
+    PaymentClassList    : PrescribedPaymentClassList
 }

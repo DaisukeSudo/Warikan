@@ -32,10 +32,10 @@ package "Domain" as domain {
 
     class GuestGroup {
       PrescribedPaymentClassID
-      GuestsNumber
+      GuestsCount
     }
 
-    class GuestsNumber {
+    class GuestsCount {
       Value : uint
     }
 
@@ -101,7 +101,7 @@ package "Domain" as domain {
       PrescribedPaymentAmount
       PrescribedPaymentType
       GuestPaymentAmount
-      GuestsNumber
+      GuestsCount
     }
 
     class GuestPaymentAmount {
@@ -144,7 +144,7 @@ PrescribedPaymentClass *-d-> PrescribedPaymentType
 Organizer *-d-> PrescribedPaymentClassID
 Organizer -r[hidden]- GuestGroup
 GuestGroup *-d-> PrescribedPaymentClassID
-GuestGroup *-d-> GuestsNumber
+GuestGroup *-d-> GuestsCount
 
 SplitBillReport *-d-> DrinkingPartyID
 SplitBillReport *--d-> TotalBilledAmount
@@ -160,7 +160,7 @@ GuestPaymentClassList *-d-> GuestPaymentClass
 ' GuestPaymentClass *-d-> PrescribedPaymentClassID
 ' GuestPaymentClass *-d-> PrescribedPaymentAmount
 ' GuestPaymentClass *-d-> PrescribedPaymentType
-GuestPaymentClass *-d-> GuestsNumber
+GuestPaymentClass *-d-> GuestsCount
 GuestPaymentClass *-d-> GuestPaymentAmount
 ExtraOrShortage *-d-> Extra
 ExtraOrShortage *-d-> Shortage
