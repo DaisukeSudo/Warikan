@@ -4,7 +4,80 @@
 @startuml
 package "Domain" as domain {
 
+  package Common as pkg_common {
+
+    ' BasicValue
+
+    class PositiveAmount {
+      of decimal
+    }
+
+    class NegativeAmount {
+      of decimal
+    }
+  }
+
   package DrinkingParty as pkg_drinking_party {
+
+    ' PrescribedPaymentClass
+
+    class PrescribedPaymentClassId {
+      of uint
+    }
+
+    enum PrescribedPaymentType {
+      JUST
+      JUST_OR_MORE
+    }
+
+    class PrescribedPaymentAmount {
+      of PositiveAmount
+    }
+
+    class PrescribedPaymentClass {
+      PrescribedPaymentClassId
+      PrescribedPaymentAmount
+      PrescribedPaymentType
+    }
+
+    class PrescribedPaymentClassList {
+      Items : PrescribedPaymentClass list
+      Add()
+      FindOneById()
+    }
+
+    ' GuestsCount
+
+    class GuestsCount {
+      of uint
+    }
+
+    class GuestGroup {
+      PaymentClassId : PrescribedPaymentClassId
+      GuestsCount
+    }
+
+    class GuestGroupList {
+      Items : GuestGroup list
+    }
+
+    ' Organizer
+
+    class Organizer {
+      PaymentClassId : PrescribedPaymentClassId
+    }
+
+    ' TotalBilledAmount
+
+    class TotalBilledAmount {
+      of PositiveAmount
+    }
+
+    ' DrinkingParty
+
+    class DrinkingPartyID {
+      of UUID
+    }
 
     class DrinkingParty {
       DrinkingPartyID
@@ -12,54 +85,6 @@ package "Domain" as domain {
       Organizer
       GuestGroupList
       PaymentClassList : PrescribedPaymentClassList
-    }
-
-    class DrinkingPartyID {
-      Value : UUID
-    }
-
-    class TotalBilledAmount {
-      Value : uint
-    }
-
-    class Organizer {
-      PrescribedPaymentClassID
-    }
-
-    class GuestGroupList {
-      Items : GuestGroup list
-    }
-
-    class GuestGroup {
-      PrescribedPaymentClassID
-      GuestsCount
-    }
-
-    class GuestsCount {
-      Value : uint
-    }
-
-    class PrescribedPaymentClassList {
-      Items : PrescribedPaymentClass list
-    }
-
-    class PrescribedPaymentClass {
-      PrescribedPaymentClassID
-      PrescribedPaymentAmount
-      PrescribedPaymentType
-    }
-
-    class PrescribedPaymentClassID {
-      Value : uint
-    }
-
-    class PrescribedPaymentAmount {
-      Value : uint
-    }
-
-    enum PrescribedPaymentType {
-      JUST
-      JUST_OR_MORE
     }
   }
 
@@ -72,6 +97,71 @@ package "Domain" as domain {
 
   package SplitBillReport as pkg_split_bill_report {
 
+    ' OrganizerPaymentClass
+
+    class OrganizerPaymentAmount {
+      of PositiveAmount
+    }
+
+    class OrganizerPaymentClass {
+      PrescribedPaymentClassId
+      PrescribedPaymentAmount
+      PrescribedPaymentType
+      OrganizerPaymentAmount
+      CreateBy()
+      ClassPaymentAmountValue()
+    }
+
+    ' GuestPaymentClass
+
+    class GuestPaymentAmount {
+      of PositiveAmount
+    }
+
+    class GuestPaymentClass {
+      PrescribedPaymentClassId
+      PrescribedPaymentAmount
+      PrescribedPaymentType
+      GuestPaymentAmount
+      GuestsCount
+      CreateBy()
+      ClassPaymentAmountValue()
+    }
+
+    class GuestPaymentClassList {
+      Items : GuestPaymentClass list
+      CreateBy()
+    }
+
+    '' ReportedPaymentClass
+    '
+    'class ReportedPaymentClass << (U, #d9c383) >> {
+    '  ReportedOrganizerPaymentClass of OrganizerPaymentClass
+    '  ReportedGuestPaymentClass     of GuestPaymentClass
+    '}
+    '
+    'class ReportedPaymentClassList {
+    '  Items : ReportedPaymentClass list
+    '  TotalPaymentAmountValue()
+    '}
+
+    ' TotalPaymentAmount
+
+    class TotalPaymentAmount {
+      of PositiveAmount
+      CreateBy()
+    }
+
+    ' ExtraOrShortage
+
+    class ExtraOrShortage << (U, #d9c383) >> {
+      Extra    of PositiveAmount
+      Shortage of NegativeAmount
+      CreateBy()
+    }
+
+    ' SplitBillReport
+
     class SplitBillReport {
       DrinkingPartyID
       TotalBilledAmount
@@ -81,49 +171,17 @@ package "Domain" as domain {
       ExtraOrShortage
     }
 
-    class OrganizerPaymentClass {
-      PrescribedPaymentClassID
-      PrescribedPaymentAmount
-      PrescribedPaymentType
-      OrganizerPaymentAmount
-    }
-
-    class OrganizerPaymentAmount {
-      Value : uint
-    }
-
-    class GuestPaymentClassList {
-      Items : GuestPaymentClass list
-    }
-
-    class GuestPaymentClass {
-      PrescribedPaymentClassID
-      PrescribedPaymentAmount
-      PrescribedPaymentType
-      GuestPaymentAmount
-      GuestsCount
-    }
-
-    class GuestPaymentAmount {
-      Value : uint
-    }
-
-    class TotalPaymentAmount {
-      Value : uint
-    }
-
-    class ExtraOrShortage << (U, #d9c383) >> {
-      Extra of Extra
-      Shortage of Shortage
-    }
-
-    class Extra {
-      Value : uint
-    }
-
-    class Shortage {
-      Value : int
-    }
+    '' UnadjustedSplitBillReport
+    '
+    'class UnadjustedSplitBillReport {
+    '  DrinkingPartyID
+    '  TotalBilledAmount
+    '  OrganizerPaymentClass
+    '  GuestPaymentClassList
+    '  TotalPaymentAmount
+    '  ExtraOrShortage
+    '  CreateBy()
+    '}
   }
 }
 
@@ -138,12 +196,12 @@ DrinkingParty *-d-> GuestGroupList
 DrinkingParty *-d-> PrescribedPaymentClassList
 GuestGroupList *-d-> GuestGroup
 PrescribedPaymentClassList *-d-> PrescribedPaymentClass
-PrescribedPaymentClass *-d-> PrescribedPaymentClassID
+PrescribedPaymentClass *-d-> PrescribedPaymentClassId
 PrescribedPaymentClass *-d-> PrescribedPaymentAmount
 PrescribedPaymentClass *-d-> PrescribedPaymentType
-Organizer *-d-> PrescribedPaymentClassID
+Organizer *-d-> PrescribedPaymentClassId
 Organizer -r[hidden]- GuestGroup
-GuestGroup *-d-> PrescribedPaymentClassID
+GuestGroup *-d-> PrescribedPaymentClassId
 GuestGroup *-d-> GuestsCount
 
 SplitBillReport *-d-> DrinkingPartyID
@@ -152,17 +210,15 @@ SplitBillReport *--d-> OrganizerPaymentClass
 SplitBillReport *-d-> GuestPaymentClassList
 SplitBillReport *--d-> TotalPaymentAmount
 SplitBillReport *--d-> ExtraOrShortage
-' OrganizerPaymentClass *-d-> PrescribedPaymentClassID
+' OrganizerPaymentClass *-d-> PrescribedPaymentClassId
 ' OrganizerPaymentClass *-d-> PrescribedPaymentAmount
 ' OrganizerPaymentClass *-d-> PrescribedPaymentType
 OrganizerPaymentClass *-d-> OrganizerPaymentAmount
 GuestPaymentClassList *-d-> GuestPaymentClass
-' GuestPaymentClass *-d-> PrescribedPaymentClassID
+' GuestPaymentClass *-d-> PrescribedPaymentClassId
 ' GuestPaymentClass *-d-> PrescribedPaymentAmount
 ' GuestPaymentClass *-d-> PrescribedPaymentType
 GuestPaymentClass *-d-> GuestsCount
 GuestPaymentClass *-d-> GuestPaymentAmount
-ExtraOrShortage *-d-> Extra
-ExtraOrShortage *-d-> Shortage
 
 @enduml

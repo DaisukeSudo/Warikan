@@ -1,1 +1,3 @@
 # Warikan
+
+[Document](./etc/docs)

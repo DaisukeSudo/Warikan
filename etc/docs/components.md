@@ -14,14 +14,13 @@ package "Domain [F#]"             as domain              #d4f1f8 {}
 database "Data Store"             as datastore
 
 baker              --> controller
-baker              --> datasource
 baker              --> datasource_adaptor
 baker              --> service
 baker              --> domain
 controller         --> service
 controller         --> domain
 datasource         --> datastore
-datasource_adaptor <-- datasource
+datasource_adaptor --> datasource
 datasource_adaptor --> service
 datasource_adaptor --> domain
 service            --> domain
