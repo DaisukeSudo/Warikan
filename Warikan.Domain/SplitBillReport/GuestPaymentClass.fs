@@ -30,7 +30,7 @@ module GuestPaymentClass =
             -> GuestGroup
             -> GuestPaymentClass
 
-    let createBy : CreateBy =
+    let createBy: CreateBy =
         fun paymentClassList guestGroup ->
             paymentClassList
             |> PrescribedPaymentClassList.findOneById guestGroup.PaymentClassId 
@@ -42,25 +42,38 @@ module GuestPaymentClass =
                 GuestsCount                 = guestGroup.GuestsCount
             }
 
-    let guestPaymentAmountValue (c: GuestPaymentClass) =
-        c.GuestPaymentAmount
-            |> GuestPaymentAmount.value
+    type ClassPaymentAmountValue =
+        GuestPaymentClass
+            -> PositiveAmount
 
-    let guestsCountValue (c: GuestPaymentClass) =
-        c.GuestsCount
-            |> GuestsCount.value
-
-    let classPaymentAmountValue (c: GuestPaymentClass) =
+    let classPaymentAmountValue: ClassPaymentAmountValue =
+        fun c ->
             [
-                c |> guestPaymentAmountValue |> PositiveAmount.value
-                c |> guestsCountValue |> decimal
+                c.GuestPaymentAmount |> GuestPaymentAmount.value |> PositiveAmount.value
+                c.GuestsCount        |> GuestsCount.value        |> decimal
             ]
             |> Seq.reduce (*)
             |> PositiveAmount.create
 
 
+    type SetGuestPaymentAmount = 
+        GuestPaymentAmount
+            -> GuestPaymentClass
+            -> GuestPaymentClass
+
+    let setGuestPaymentAmount: SetGuestPaymentAmount =
+        fun newPaymentAmount pc ->
+            {
+                PrescribedPaymentClassId    = pc.PrescribedPaymentClassId
+                PrescribedPaymentType       = pc.PrescribedPaymentType
+                PrescribedPaymentAmount     = pc.PrescribedPaymentAmount
+                GuestPaymentAmount          = newPaymentAmount
+                GuestsCount                 = pc.GuestsCount
+            }
+
+
 type GuestPaymentClassList = {
-    Items : GuestPaymentClass list
+    Items: GuestPaymentClass list
 }
 
 module GuestPaymentClassList =
@@ -69,7 +82,7 @@ module GuestPaymentClassList =
             -> GuestGroupList
             -> GuestPaymentClassList
 
-    let createBy : CreateBy =
+    let createBy: CreateBy =
         fun paymentClassList guestGroupList ->
             guestGroupList.Items
             |> List.map (GuestPaymentClass.createBy paymentClassList)

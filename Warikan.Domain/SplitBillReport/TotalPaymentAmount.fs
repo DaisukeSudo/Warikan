@@ -9,7 +9,7 @@ type TotalPaymentAmount =
         match this with (TotalPaymentAmount v) -> v |> PositiveAmount.value
 
 module TotalPaymentAmount =
-    let create (v : PositiveAmount) = TotalPaymentAmount v
+    let create v = TotalPaymentAmount v
     let value (TotalPaymentAmount v) = v
 
     type CreateBy =

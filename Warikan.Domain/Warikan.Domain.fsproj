@@ -16,9 +16,9 @@
     <Compile Include="SplitBillReport\ReportedPaymentClass.fs" />
     <Compile Include="SplitBillReport\TotalPaymentAmount.fs" />
     <Compile Include="SplitBillReport\ExtraOrShortage.fs" />
-    <Compile Include="SplitBillReport\UnadjustedSplitBillReport.fs" />
-    <Compile Include="SplitBillReport\AdditionalPayer.fs" />
     <Compile Include="SplitBillReport\SplitBillReport.fs" />
+    <Compile Include="Accountant\UnadjustedSplitBillReport.fs" />
+    <Compile Include="Accountant\AdditionalPayer.fs" />
     <Compile Include="Accountant\SplitBillReportAdjustor.fs" />
     <Compile Include="Accountant\Accountant.fs" />
   </ItemGroup>

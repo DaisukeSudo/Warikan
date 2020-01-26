@@ -4,8 +4,13 @@ open Warikan.Domain.DrinkingParty
 open Warikan.Domain.SplitBillReport
 
 module Accountant =
-    type CreateUnadjustedSplitBillReport = UnadjustedSplitBillReport.CreateBy
-    type AdjustSplitBillReport = SplitBillReportAdjustor.AdjustSplitBillReport
+    type CreateUnadjustedSplitBillReport =
+        DrinkingParty                           // I
+            -> UnadjustedSplitBillReport        // O
+
+    type AdjustSplitBillReport =
+        UnadjustedSplitBillReport               // I
+            -> SplitBillReport                  // O
 
     type Calculate =
         CreateUnadjustedSplitBillReport         // D
@@ -13,9 +18,11 @@ module Accountant =
             -> DrinkingParty                    // I
             -> SplitBillReport                  // O
 
-    let calculate : Calculate =
+    let calculate: Calculate =
         fun createUnadjustedSplitBillReport
             adjustSplitBillReport
             drinkingParty
             ->
-            failwith "Not Implemented"
+            drinkingParty
+            |> createUnadjustedSplitBillReport
+            |> adjustSplitBillReport

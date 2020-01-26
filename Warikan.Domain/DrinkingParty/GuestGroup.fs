@@ -26,5 +26,5 @@ module GuestGroup =
 
 
 type GuestGroupList = {
-    Items : GuestGroup list
+    Items: GuestGroup list
 }

@@ -1,12 +1,12 @@
 ﻿namespace Warikan.Domain.DrinkingParty
 
 type Organizer = {
-    PaymentClassId : PrescribedPaymentClassId
+    PaymentClassId: PrescribedPaymentClassId
 }
 
 module Organizer =
     let create
-        (paymentClassId : PrescribedPaymentClassId)
+        (paymentClassId: PrescribedPaymentClassId)
         : Organizer
         =
         {

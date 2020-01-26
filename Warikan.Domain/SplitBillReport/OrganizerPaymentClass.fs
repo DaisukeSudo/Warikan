@@ -10,7 +10,7 @@ module OrganizerPaymentAmount =
     let create v = OrganizerPaymentAmount v
     let value (OrganizerPaymentAmount v) = v
 
-    let createBy (prescribedPaymentAmount : PrescribedPaymentAmount) =
+    let createBy (prescribedPaymentAmount: PrescribedPaymentAmount) =
         prescribedPaymentAmount
         |> PrescribedPaymentAmount.value
         |> create
@@ -29,7 +29,7 @@ module OrganizerPaymentClass =
             -> Organizer
             -> OrganizerPaymentClass
 
-    let createBy : CreateBy =
+    let createBy: CreateBy =
         fun paymentClassList organizer ->
             paymentClassList
             |> PrescribedPaymentClassList.findOneById organizer.PaymentClassId 
@@ -40,6 +40,26 @@ module OrganizerPaymentClass =
                 OrganizerPaymentAmount      = paymentClass.PaymentAmount |> OrganizerPaymentAmount.createBy
             }
 
-    let classPaymentAmountValue (c: OrganizerPaymentClass) =
-        c.OrganizerPaymentAmount
-        |> OrganizerPaymentAmount.value
+    type ClassPaymentAmountValue =
+        OrganizerPaymentClass
+            -> PositiveAmount
+
+    let classPaymentAmountValue: ClassPaymentAmountValue =
+        fun c ->
+            c.OrganizerPaymentAmount
+            |> OrganizerPaymentAmount.value
+
+
+    type SetOrganizerPaymentAmount = 
+        OrganizerPaymentAmount
+            -> OrganizerPaymentClass
+            -> OrganizerPaymentClass
+
+    let setOrganizerPaymentAmount: SetOrganizerPaymentAmount =
+        fun newPaymentAmount pc ->
+            {
+                PrescribedPaymentClassId    = pc.PrescribedPaymentClassId
+                PrescribedPaymentType       = pc.PrescribedPaymentType
+                PrescribedPaymentAmount     = pc.PrescribedPaymentAmount
+                OrganizerPaymentAmount      = newPaymentAmount
+            }

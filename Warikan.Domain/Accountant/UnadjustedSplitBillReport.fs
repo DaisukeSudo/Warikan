@@ -1,6 +1,7 @@
-﻿namespace Warikan.Domain.SplitBillReport
+﻿namespace Warikan.Domain.Accountant
 
 open Warikan.Domain.DrinkingParty
+open Warikan.Domain.SplitBillReport
 
 type UnadjustedSplitBillReport = {
     DrinkingPartyId         : DrinkingPartyId
@@ -12,24 +13,6 @@ type UnadjustedSplitBillReport = {
 }
 
 module UnadjustedSplitBillReport =
-    let create
-        (totalBilledAmount       : TotalBilledAmount        )
-        (organizerPaymentClass   : OrganizerPaymentClass    )
-        (guestPaymentClassList   : GuestPaymentClassList    )
-        (totalPaymentAmount      : TotalPaymentAmount       )
-        (extraOrShortage         : ExtraOrShortage          )
-        (drinkingPartyId         : DrinkingPartyId          )
-        : UnadjustedSplitBillReport
-        =
-        {
-            DrinkingPartyId         = drinkingPartyId
-            TotalBilledAmount       = totalBilledAmount
-            OrganizerPaymentClass   = organizerPaymentClass
-            GuestPaymentClassList   = guestPaymentClassList
-            TotalPaymentAmount      = totalPaymentAmount
-            ExtraOrShortage         = extraOrShortage
-        }
-
     type CreateBy =
         OrganizerPaymentClass.CreateBy              // D
             -> GuestPaymentClassList.CreateBy       // D
@@ -39,7 +22,7 @@ module UnadjustedSplitBillReport =
             -> DrinkingParty                        // I
             -> UnadjustedSplitBillReport            // O
 
-    let createBy : CreateBy = 
+    let createBy: CreateBy = 
         fun createOrganizerPaymentClass
             createGuestPaymentClassList
             createReportedPaymentClassList
@@ -49,7 +32,7 @@ module UnadjustedSplitBillReport =
             ->
             let organizerPaymentClass       = drinkingParty.Organizer       |> createOrganizerPaymentClass drinkingParty.PaymentClassList
             let guestPaymentClassList       = drinkingParty.GuestGroupList  |> createGuestPaymentClassList drinkingParty.PaymentClassList
-            let reportedPaymentClassList    = (createReportedPaymentClassList organizerPaymentClass guestPaymentClassList)
+            let reportedPaymentClassList    = (organizerPaymentClass, guestPaymentClassList) |> createReportedPaymentClassList
             let totalPaymentAmount          = reportedPaymentClassList      |> createTotalPaymentAmount
             let extraOrShortage             = totalPaymentAmount            |> createExtraOrShortage drinkingParty.TotalBilledAmount
             {

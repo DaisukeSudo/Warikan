@@ -44,23 +44,24 @@ module PrescribedPaymentClass =
 
 
 type PrescribedPaymentClassList = {
-    Items : PrescribedPaymentClass list
+    Items: PrescribedPaymentClass list
 }
 
 module PrescribedPaymentClassList =
     let private getMaxPaymentClassId
-        (list : PrescribedPaymentClassList)
+        (paymentClassList: PrescribedPaymentClassList)
         : PrescribedPaymentClassId
         =
-        list.Items
+        paymentClassList.Items
         |> Seq.map (fun x -> x.PaymentClassId)
         |> Seq.max
 
     let private newMaxPaymentClassId
-        (list : PrescribedPaymentClassList)
+        (paymentClassList: PrescribedPaymentClassList)
         : PrescribedPaymentClassId
         =
-        getMaxPaymentClassId list
+        paymentClassList
+        |> getMaxPaymentClassId 
         |> PrescribedPaymentClassId.value
         |> (+) 1u
         |> PrescribedPaymentClassId.create
@@ -71,18 +72,19 @@ module PrescribedPaymentClassList =
             -> PrescribedPaymentClassList
             -> PrescribedPaymentClassList
         
-    let add : Add =
-        fun paymentType paymentAmount list ->
-            newMaxPaymentClassId list
+    let add: Add =
+        fun paymentType paymentAmount paymentClassList ->
+            paymentClassList
+            |> newMaxPaymentClassId 
             |> PrescribedPaymentClass.create paymentType paymentAmount
-            |> fun newItem -> { Items = list.Items @ [newItem] }
+            |> fun newItem -> { Items = paymentClassList.Items @ [newItem] }
 
     type FindOneById =
         PrescribedPaymentClassId
             -> PrescribedPaymentClassList
             -> PrescribedPaymentClass
 
-    let findOneById : FindOneById =
-        fun id list ->
-            list.Items
-            |> Seq.find (fun x -> x.PaymentClassId = id)
+    let findOneById: FindOneById =
+        fun paymentClassId paymentClassList ->
+            paymentClassList.Items
+            |> Seq.find (fun x -> x.PaymentClassId = paymentClassId)
