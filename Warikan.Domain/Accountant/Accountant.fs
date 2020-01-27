@@ -18,7 +18,7 @@ module Accountant =
             -> DrinkingParty                    // I
             -> SplitBillReport                  // O
 
-    let calculate: Calculate =
+    let calculate : Calculate =
         fun createUnadjustedSplitBillReport
             adjustSplitBillReport
             drinkingParty

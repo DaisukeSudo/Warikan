@@ -12,7 +12,7 @@ module ReportedPaymentClass =
         ReportedPaymentClass
             -> PositiveAmount
 
-    let classPaymentAmountValue: ClassPaymentAmountValue =
+    let classPaymentAmountValue : ClassPaymentAmountValue =
         fun paymentClass ->
             match paymentClass with
             | ReportedOrganizerPaymentClass c -> c |> OrganizerPaymentClass.classPaymentAmountValue
@@ -23,7 +23,7 @@ module ReportedPaymentClass =
             -> ReportedPaymentClass
             -> bool
 
-    let conditionPaymentType: ConditionPaymentType =
+    let conditionPaymentType : ConditionPaymentType =
         fun paymentType paymentClass ->
             (
                 match paymentClass with
@@ -36,7 +36,7 @@ module ReportedPaymentClass =
         ReportedPaymentClass
             -> uint32
 
-    let memberCount: MemberCount =
+    let memberCount : MemberCount =
         fun paymentClass ->
             match paymentClass with
             | ReportedOrganizerPaymentClass _ -> 1u
@@ -51,7 +51,7 @@ module ReportedGuestPaymentClass =
 
 
 type ReportedPaymentClassList = {
-    Items: ReportedPaymentClass list
+    Items : ReportedPaymentClass list
 }
 
 module ReportedPaymentClassList =
@@ -59,7 +59,7 @@ module ReportedPaymentClassList =
         OrganizerPaymentClass * GuestPaymentClassList
             -> ReportedPaymentClassList
 
-    let createBy: CreateBy =
+    let createBy : CreateBy =
         fun (organizerPaymentClass, guestPaymentClassList) ->
             guestPaymentClassList.Items
             |> List.map ReportedGuestPaymentClass.create
@@ -70,7 +70,7 @@ module ReportedPaymentClassList =
         ReportedPaymentClassList
             -> PositiveAmount
 
-    let totalPaymentAmountValue: TotalPaymentAmountValue =
+    let totalPaymentAmountValue : TotalPaymentAmountValue =
         fun paymentClassList ->
             paymentClassList.Items
             |> Seq.map (fun x -> x |> ReportedPaymentClass.classPaymentAmountValue)
@@ -81,7 +81,7 @@ module ReportedPaymentClassList =
             -> ReportedPaymentClassList
             -> ReportedPaymentClassList
 
-    let filterByPaymentType: FilterByPaymentType =
+    let filterByPaymentType : FilterByPaymentType =
         fun paymentType paymentClassList ->
             paymentClassList.Items
             |> List.filter (fun x -> x |> ReportedPaymentClass.conditionPaymentType paymentType)
@@ -91,7 +91,7 @@ module ReportedPaymentClassList =
         ReportedPaymentClassList
             -> uint32
 
-    let memberCount: MemberCount =
+    let memberCount : MemberCount =
         fun paymentClassList ->
             paymentClassList.Items
             |> Seq.map ReportedPaymentClass.memberCount

@@ -26,5 +26,13 @@ module GuestGroup =
 
 
 type GuestGroupList = {
-    Items: GuestGroup list
+    Items : GuestGroup list
 }
+
+module GuestGroupList =
+    let create
+        (items : GuestGroup list)
+        =
+        {
+            Items = items
+        }

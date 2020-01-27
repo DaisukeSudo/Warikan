@@ -44,12 +44,19 @@ module PrescribedPaymentClass =
 
 
 type PrescribedPaymentClassList = {
-    Items: PrescribedPaymentClass list
+    Items : PrescribedPaymentClass list
 }
 
 module PrescribedPaymentClassList =
+    let create
+        (items : PrescribedPaymentClass list)
+        =
+        {
+            Items = items
+        }
+
     let private getMaxPaymentClassId
-        (paymentClassList: PrescribedPaymentClassList)
+        (paymentClassList : PrescribedPaymentClassList)
         : PrescribedPaymentClassId
         =
         paymentClassList.Items
@@ -57,7 +64,7 @@ module PrescribedPaymentClassList =
         |> Seq.max
 
     let private newMaxPaymentClassId
-        (paymentClassList: PrescribedPaymentClassList)
+        (paymentClassList : PrescribedPaymentClassList)
         : PrescribedPaymentClassId
         =
         paymentClassList
@@ -72,7 +79,7 @@ module PrescribedPaymentClassList =
             -> PrescribedPaymentClassList
             -> PrescribedPaymentClassList
         
-    let add: Add =
+    let add : Add =
         fun paymentType paymentAmount paymentClassList ->
             paymentClassList
             |> newMaxPaymentClassId 
@@ -84,7 +91,7 @@ module PrescribedPaymentClassList =
             -> PrescribedPaymentClassList
             -> PrescribedPaymentClass
 
-    let findOneById: FindOneById =
+    let findOneById : FindOneById =
         fun paymentClassId paymentClassList ->
             paymentClassList.Items
             |> Seq.find (fun x -> x.PaymentClassId = paymentClassId)

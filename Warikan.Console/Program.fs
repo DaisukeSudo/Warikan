@@ -1,8 +1,8 @@
-﻿// Learn more about F# at http://fsharp.org
+﻿module Warikan.Console.Program
 
 open System
 
 [<EntryPoint>]
 let main argv =
-    printfn "Hello World from F#!"
+    Sample.SampleCase1.run ()
     0 // return an integer exit code

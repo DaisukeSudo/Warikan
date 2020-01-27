@@ -10,7 +10,7 @@ module SplitBillReportAdjustor =
             -> UnadjustedSplitBillReport
             -> SplitBillReport
 
-    let makeUpShortfall: MakeUpShortfall =
+    let makeUpShortfall : MakeUpShortfall =
         fun v u ->
             let additionalPaymentAmount =
                 (u.OrganizerPaymentClass, u.GuestPaymentClassList)
@@ -22,7 +22,7 @@ module SplitBillReportAdjustor =
                 u.OrganizerPaymentClass
                 |> AdditionalPaymentAmount.addToOrganizerPaymentClass additionalPaymentAmount
 
-            let newGuestPaymentClassList: GuestPaymentClassList =
+            let newGuestPaymentClassList : GuestPaymentClassList =
                 u.GuestPaymentClassList.Items
                 |> List.map (
                     fun item ->
@@ -48,7 +48,7 @@ module SplitBillReportAdjustor =
         UnadjustedSplitBillReport
             -> SplitBillReport
 
-    let adjust: Adjust =
+    let adjust : Adjust =
         fun u ->
             match u.ExtraOrShortage with
             | Extra _ ->

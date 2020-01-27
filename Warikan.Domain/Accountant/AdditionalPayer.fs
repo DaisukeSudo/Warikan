@@ -15,7 +15,7 @@ module AdditionalPayersCount =
         ReportedPaymentClassList
             -> AdditionalPayersCount
     
-    let createBy: CreateBy =
+    let createBy : CreateBy =
         fun paymentClassList ->
             paymentClassList
             |> ReportedPaymentClassList.filterByPaymentType PrescribedPaymentType.JUST_OR_MORE
@@ -35,7 +35,7 @@ module AdditionalPaymentAmount =
             -> AdditionalPayersCount
             -> AdditionalPaymentAmount
 
-    let createBy: CreateBy =
+    let createBy : CreateBy =
         fun negativeAmount additionalPayersCount ->
             [
                 negativeAmount |> NegativeAmount.value |> abs
@@ -51,7 +51,7 @@ module AdditionalPaymentAmount =
             -> OrganizerPaymentAmount
             -> OrganizerPaymentAmount
 
-    let addToOrganizerPaymentAmount: AddToOrganizerPaymentAmount =
+    let addToOrganizerPaymentAmount : AddToOrganizerPaymentAmount =
         fun a b ->
             [
                 a |> value
@@ -66,7 +66,7 @@ module AdditionalPaymentAmount =
             -> OrganizerPaymentClass
             -> OrganizerPaymentClass
 
-    let addToOrganizerPaymentClass: AddToOrganizerPaymentClass =
+    let addToOrganizerPaymentClass : AddToOrganizerPaymentClass =
         fun a pc ->
             pc
             |> OrganizerPaymentClass.setOrganizerPaymentAmount
@@ -78,7 +78,7 @@ module AdditionalPaymentAmount =
             -> GuestPaymentAmount
             -> GuestPaymentAmount
 
-    let addToGuestPaymentAmount: AddToGuestPaymentAmount =
+    let addToGuestPaymentAmount : AddToGuestPaymentAmount =
         fun a b ->
             [
                 a |> value
@@ -93,7 +93,7 @@ module AdditionalPaymentAmount =
             -> GuestPaymentClass
             -> GuestPaymentClass
 
-    let addToGuestPaymentClass: AddToGuestPaymentClass =
+    let addToGuestPaymentClass : AddToGuestPaymentClass =
         fun a pc ->
             pc
             |> GuestPaymentClass.setGuestPaymentAmount

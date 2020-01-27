@@ -22,7 +22,7 @@ module UnadjustedSplitBillReport =
             -> DrinkingParty                        // I
             -> UnadjustedSplitBillReport            // O
 
-    let createBy: CreateBy = 
+    let createBy : CreateBy = 
         fun createOrganizerPaymentClass
             createGuestPaymentClassList
             createReportedPaymentClassList

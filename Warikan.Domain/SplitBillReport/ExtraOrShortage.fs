@@ -8,7 +8,7 @@ type ExtraOrShortage =
     | Shortage  of NegativeAmount
 
 module ExtraOrShortage =
-    let create (v: decimal) =
+    let create (v : decimal) =
         if v >= 0M
         then PositiveAmount.create v |> Extra
         else NegativeAmount.create v |> Shortage
