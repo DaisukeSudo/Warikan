@@ -27,8 +27,8 @@ module ExtraOrShortage =
     let createBy : CreateBy =
         fun billedAmount paymentAmount ->
             [
-                TotalBilledAmount.value billedAmount
                 TotalPaymentAmount.value paymentAmount
+                TotalBilledAmount.value billedAmount
             ]
             |> Seq.map PositiveAmount.value
             |> Seq.reduce (-)

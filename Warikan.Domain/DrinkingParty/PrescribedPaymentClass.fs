@@ -48,12 +48,7 @@ type PrescribedPaymentClassList = {
 }
 
 module PrescribedPaymentClassList =
-    let create
-        (items : PrescribedPaymentClass list)
-        =
-        {
-            Items = items
-        }
+    let create items = { Items = items }
 
     let private getMaxPaymentClassId
         (paymentClassList : PrescribedPaymentClassList)

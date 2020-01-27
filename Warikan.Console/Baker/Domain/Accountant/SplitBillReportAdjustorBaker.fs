@@ -6,3 +6,6 @@ open Warikan.Domain.Accountant
 module SplitBillReportAdjustorBaker =
     let adjust =
         SplitBillReportAdjustor.adjust
+            ReportedPaymentClassList.createBy
+            TotalPaymentAmount.createBy
+            ExtraOrShortage.createBy

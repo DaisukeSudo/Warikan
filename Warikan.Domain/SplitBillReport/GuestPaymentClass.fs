@@ -71,12 +71,13 @@ module GuestPaymentClass =
                 GuestsCount                 = pc.GuestsCount
             }
 
-
 type GuestPaymentClassList = {
     Items : GuestPaymentClass list
 }
 
 module GuestPaymentClassList =
+    let create items = { Items = items }
+
     type CreateBy =
         PrescribedPaymentClassList
             -> GuestGroupList

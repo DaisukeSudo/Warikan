@@ -48,14 +48,14 @@ module AdditionalPaymentAmount =
 
     type AddToOrganizerPaymentAmount =
         AdditionalPaymentAmount
-            -> OrganizerPaymentAmount
+            -> PrescribedPaymentAmount
             -> OrganizerPaymentAmount
 
     let addToOrganizerPaymentAmount : AddToOrganizerPaymentAmount =
         fun a b ->
             [
                 a |> value
-                b |> OrganizerPaymentAmount.value
+                b |> PrescribedPaymentAmount.value
             ]
             |> Seq.sum
             |> OrganizerPaymentAmount.create
@@ -68,21 +68,24 @@ module AdditionalPaymentAmount =
 
     let addToOrganizerPaymentClass : AddToOrganizerPaymentClass =
         fun a pc ->
-            pc
-            |> OrganizerPaymentClass.setOrganizerPaymentAmount
-                (pc.OrganizerPaymentAmount |> addToOrganizerPaymentAmount a)
+            match pc.PrescribedPaymentType with
+            | PrescribedPaymentType.JUST         -> pc
+            | PrescribedPaymentType.JUST_OR_MORE ->
+                pc
+                |> OrganizerPaymentClass.setOrganizerPaymentAmount
+                    (pc.PrescribedPaymentAmount |> addToOrganizerPaymentAmount a)
 
 
     type AddToGuestPaymentAmount =
         AdditionalPaymentAmount
-            -> GuestPaymentAmount
+            -> PrescribedPaymentAmount
             -> GuestPaymentAmount
 
     let addToGuestPaymentAmount : AddToGuestPaymentAmount =
         fun a b ->
             [
                 a |> value
-                b |> GuestPaymentAmount.value
+                b |> PrescribedPaymentAmount.value
             ]
             |> Seq.sum
             |> GuestPaymentAmount.create
@@ -95,7 +98,9 @@ module AdditionalPaymentAmount =
 
     let addToGuestPaymentClass : AddToGuestPaymentClass =
         fun a pc ->
-            pc
-            |> GuestPaymentClass.setGuestPaymentAmount
-                (pc.GuestPaymentAmount |> addToGuestPaymentAmount a)
-
+            match pc.PrescribedPaymentType with
+            | PrescribedPaymentType.JUST         -> pc
+            | PrescribedPaymentType.JUST_OR_MORE ->
+                pc
+                |> GuestPaymentClass.setGuestPaymentAmount
+                    (pc.PrescribedPaymentAmount |> addToGuestPaymentAmount a)

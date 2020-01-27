@@ -30,9 +30,4 @@ type GuestGroupList = {
 }
 
 module GuestGroupList =
-    let create
-        (items : GuestGroup list)
-        =
-        {
-            Items = items
-        }
+    let create items = { Items = items }

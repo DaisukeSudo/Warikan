@@ -55,6 +55,8 @@ type ReportedPaymentClassList = {
 }
 
 module ReportedPaymentClassList =
+    let create items = { Items = items }
+
     type CreateBy =
         OrganizerPaymentClass * GuestPaymentClassList
             -> ReportedPaymentClassList
